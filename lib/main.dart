@@ -24,7 +24,14 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Hello Flutter!'),
+        child: Text(
+          "Daily MOTIVATIONAL Quote",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
     );
   }
