@@ -47,12 +47,32 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+            Color(0xFF4A148C),
+            Color(0xFF7B1FA2),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Text(
+                "Daily Quote",
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 24),
               Text(
                 quotes[_currentIndex],
                 textAlign: TextAlign.center,
@@ -60,14 +80,16 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 24,
                     fontWeight: FontWeight.w500,
                     height: 1.4,
+                    color: Colors.white,
                   ),
           ),
           const SizedBox(height: 32),
           ElevatedButton(
             onPressed: _showNextQuote,
             child: const Text("Next Quote"),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
