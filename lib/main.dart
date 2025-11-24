@@ -73,16 +73,23 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 24),
-              Text(
-                quotes[_currentIndex],
-                textAlign: TextAlign.center,
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  quotes[_currentIndex],
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w500,
                     height: 1.4,
                     color: Colors.white,
                   ),
-          ),
+                ),
+              ),
           const SizedBox(height: 32),
           ElevatedButton(
             onPressed: _showNextQuote,
