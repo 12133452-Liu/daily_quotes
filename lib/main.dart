@@ -73,20 +73,23 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 24),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(12),
-                ),
+              AnimatedSwitcher(duration: const Duration(milliseconds: 200),
+              child: Container(
+                key: ValueKey<int>(_currentIndex),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 child: Text(
-                  quotes[_currentIndex],
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                    height: 1.4,
-                    color: Colors.white,
+                quotes[_currentIndex],
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500,
+                  height: 1.4,
+                  color: Colors.white,
+                    ),
                   ),
                 ),
               ),
