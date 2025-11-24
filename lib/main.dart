@@ -36,16 +36,38 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+
+  void _showNextQuote(){
+    setState(() {
+      _currentIndex = (_currentIndex + 1) % quotes.length;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
-            quotes[0],
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w500,
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                quotes[_currentIndex],
+                textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                    height: 1.4,
+                  ),
+          ),
+          const SizedBox(height: 32),
+          ElevatedButton(
+            onPressed: _showNextQuote,
+            child: const Text("Next Quote"),
+              ),
+            ],
           ),
         ),
       ),
