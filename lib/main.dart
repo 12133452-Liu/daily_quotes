@@ -1,5 +1,16 @@
 import 'package:flutter/material.dart';
 
+
+const List<String> quotes = [
+  "The scariest moment is always just before you start.",
+  "The secret of getting ahead is getting started.",
+  "Your only limit is your mind.",
+  "Do the best you can until you know better. Then when you know better, do better.",
+  "Do what is right, not what is easy nor what is popular.",
+  "Pursue what catches your heart, not what catches your eyes.",
+  "Success is not how high you have climbed, but how you make a positive difference to the world."
+];
+
 void main(){
   runApp(const MyApp());
 }
@@ -22,10 +33,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Text(
-          "Daily MOTIVATIONAL Quote",
+          quotes[0],
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 28,
