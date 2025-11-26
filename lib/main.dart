@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
-
-const List<String> quotes = [
+List<String> quotes = [
   "The scariest moment is always just before you start.",
   "The secret of getting ahead is getting started.",
   "Your only limit is your mind.",
@@ -36,11 +36,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0;
+  TextEditingController _quoteController = TextEditingController();
+  int _currentIndex = Random().nextInt(quotes.length);
+
+  void _addQuote() {
+    String newQuote = _quoteController.text.trim();
+    if (newQuote.isNotEmpty) {
+      setState(() {
+        quotes.add(newQuote);
+      });
+      _quoteController.clear();
+    }
+  }
 
   void _showNextQuote(){
     setState(() {
-      _currentIndex = (_currentIndex + 1) % quotes.length;
+      _currentIndex = (_currentIndex +1 ) % quotes.length;
     });
   }
 
@@ -94,6 +105,23 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
           const SizedBox(height: 32),
+              TextField(
+                controller: _quoteController,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  labelText: "Add a new quote",
+                  labelStyle: const TextStyle(color: Colors.white70),
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.15),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              const SizedBox(height:12),
+          ElevatedButton(onPressed: _addQuote, child: const Text("Add Quote"),
+          ),
+          const SizedBox(height: 12),
           ElevatedButton(
             onPressed: _showNextQuote,
             child: const Text("Next Quote"),
