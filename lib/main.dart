@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'quote_service.dart';
+import 'add_quote_page.dart';
 
-List<String> quotes = [
-  "The scariest moment is always just before you start.",
-  "The secret of getting ahead is getting started.",
-  "Your only limit is your mind.",
-  "Do the best you can until you know better. Then when you know better, do better.",
-  "Do what is right, not what is easy nor what is popular.",
-  "Pursue what catches your heart, not what catches your eyes.",
-  "Success is not how high you have climbed, but how you make a positive difference to the world."
-];
-
-void main(){
+void main() {
   runApp(const MyApp());
 }
 
@@ -20,10 +11,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Daily Quotes',
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: HomePage(),
     );
   }
 }
@@ -36,23 +26,28 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController _quoteController = TextEditingController();
-  int _currentIndex = Random().nextInt(quotes.length);
+  String quote = "Loading...";
+  String author = "";
 
-  void _addQuote() {
-    String newQuote = _quoteController.text.trim();
-    if (newQuote.isNotEmpty) {
-      setState(() {
-        quotes.add(newQuote);
-      });
-      _quoteController.clear();
-    }
+  @override
+  void initState() {
+    super.initState();
+    loadQuote();
   }
 
-  void _showNextQuote(){
-    setState(() {
-      _currentIndex = (_currentIndex +1 ) % quotes.length;
-    });
+  Future<void> loadQuote() async {
+    try {
+      final data = await QuoteService.fetchRandomQuote();
+      setState(() {
+        quote = data["quote"].toString();
+        author = data["author"].toString();
+      });
+    } catch (e) {
+      setState(() {
+        quote = "Error loading quote";
+        author = e.toString();
+      });
+    }
   }
 
   @override
@@ -62,69 +57,75 @@ class _HomePageState extends State<HomePage> {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-            Color(0xFF4A148C),
-            Color(0xFF7B1FA2),
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+              Color(0xFF4A148C),
+              Color(0xFF7B1FA2),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Center(
           child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Daily Quote",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 24),
-              AnimatedSwitcher(duration: const Duration(milliseconds: 200),
-              child: Container(
-                key: ValueKey<int>(_currentIndex),
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                child: Text(
-                quotes[_currentIndex],
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                  height: 1.4,
-                  color: Colors.white,
-                    ),
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Daily Quote",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
-              ),
-          const SizedBox(height: 32),
-              TextField(
-                controller: _quoteController,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: "Add a new quote",
-                  labelStyle: const TextStyle(color: Colors.white70),
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0.15),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+
+                const SizedBox(height: 24),
+
+                Text(
+                  quote,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    height: 1.4,
+                    color: Colors.white,
                   ),
                 ),
-              ),
-              const SizedBox(height:12),
-          ElevatedButton(onPressed: _addQuote, child: const Text("Add Quote"),
-          ),
-          const SizedBox(height: 12),
-          ElevatedButton(
-            onPressed: _showNextQuote,
-            child: const Text("Next Quote"),
+
+                const SizedBox(height: 12),
+
+                Text(
+                  author.isEmpty ? "" : "- $author",
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white70,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+
+                const SizedBox(height: 32),
+
+                ElevatedButton(
+                  onPressed: loadQuote,
+                  child: const Text("Next Quote"),
+                ),
+
+                const SizedBox(height: 12),
+
+                OutlinedButton(
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AddQuotePage(),
+                      ),
+                    );
+                    loadQuote(); // refresh after adding
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    side: const BorderSide(color: Colors.white),
+                  ),
+                  child: const Text("Add Quote"),
                 ),
               ],
             ),
@@ -134,5 +135,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
